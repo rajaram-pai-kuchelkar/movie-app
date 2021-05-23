@@ -1,0 +1,26 @@
+
+.movie-subheading{
+    padding : 8px;
+    background-color: #ff9999;
+    text-align: center;
+}
+
+.movie-release{
+    margin:16px;
+    display:flex;   
+}
+
+.movie-release-display{
+    width: 76%;
+    margin:16px;
+    
+   
+}
+
+.movie-release-filter{
+    width:24%;
+    margin:16px;
+    color : #ff9999
+}
+
+

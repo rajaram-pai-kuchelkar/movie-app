@@ -1,0 +1,45 @@
+.header{
+   position : relative;
+   display : flex; 
+   flex-direction: row;
+   background-color:  #222;
+   height: 36px;
+   padding : 8px 32px 8px 16px;
+   
+
+   align-items: center;
+
+}
+/* 
+.header div:nth-child(1){
+    position: absolute;
+    align-self: center;
+    left: 0;
+
+    
+}
+.header-button{
+    margin-right: 20px;
+}
+*/
+
+.header div {
+    width:100%;
+}
+.header div:nth-child(n+2){
+    color:green;
+    text-align: right;;
+    width:150px;
+}
+
+#header-logo-container-logo {
+    background-color: #ff7f7f;
+    /* -webkit-animation:spin 8s linear infinite; */
+}
+
+#btn-login {
+    /* background-color:green; */
+}
+
+@-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
+
