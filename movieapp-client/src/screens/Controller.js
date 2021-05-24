@@ -11,9 +11,9 @@ return (
 <Fragment>
    <Router>
    <div>
-       <Route exact path="/" render={({history},props) => <Home {...props}  />} />
+       {/* <Route exact path="/" render={({history},props) => <Home {...props}  />} /> */}
        <Route exact path="/login" render={({history}, props) => <Login {...props}  />} />
-       <Route exact path="/details" render={({history}, props) => <Details {...props}  />} />
+       <Route exact path="/" render={({history}, props) => <Details {...props}  />} />
    
    </div>
 </Router>

@@ -1,0 +1,37 @@
+
+.details-can{
+    display:flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    height: 100%;
+}
+
+div[class ^="details-can"] {
+    border: 1px solid black;
+    
+}
+
+.details-can-leftpane{
+    flex: 1 1 0;
+   padding:16px;
+   width:20%;
+}
+
+.details-can-middlepane{
+    flex: 3 1 0;
+    padding:16px;
+  
+    
+   
+}
+
+.MuiTypography-subtitle1{
+    line-height: 1 ;
+}
+
+.details-can-rightpane{
+    flex:1 1 0;
+    padding:16px;
+    width:20%;
+   
+}

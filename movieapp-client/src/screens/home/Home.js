@@ -1,4 +1,4 @@
-import React , {Fragment} from 'react';
+import React , {Fragment, useState} from 'react';
 import './Home.css';
 import Header from '../common/header/Header';
 import MovieUpcomingList from '../movie-upcoming-list/MovieUpcomingList';
@@ -7,7 +7,7 @@ import MovieReleaseFilter from '../movie-release-filter/MovieReleaseFilter';
 
 
 export default function Home(){
-
+    
 return (
     <Fragment>
    
@@ -23,7 +23,7 @@ return (
                     <MovieReleaseFilter /> 
                 </div>
         </div>
-       
+    
    
     </Fragment>
 );
