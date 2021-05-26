@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -59,8 +59,24 @@ const useStyles = makeStyles({
 export default function MovieReleaseList() {
   const classes = useStyles();
   const history = useHistory([]);
- const onTileClickHandler= ()=>{
+  const [releaseMovieList,setReleaseMovieList] = useState([]);
+  const loadMovies = async ()=>{
+    const rawResponse = await  fetch('/api/v1/movies');
+    const {movies} = await rawResponse.json();
+    const releasedMovies= await movies.filter((movie)=>{
+      return (movie.status=="RELEASED")});
+    setReleaseMovieList( releasedMovies);        
+  }
+
+  useEffect(()=>{
+    loadMovies();
+   },[]
+   );
+ 
+   const onTileClickHandler= (selectedMovie)=>{
   //e.preventDefault();
+  console.log("key is ",selectedMovie);
+  window.sessionStorage.setItem('selected-movie', selectedMovie);
   history.push('/details');
  }
   return (
@@ -70,17 +86,13 @@ export default function MovieReleaseList() {
           <ListSubheader component="div">December</ListSubheader>
       </GridListTile> */}
 
-        {movieData.map((tile) => (
-          <GridListTile key={tile.img} className={classes.gridListTile} onClick={onTileClickHandler}>
-            <img src={require(`../../assets/images/${tile.img}`)} alt={tile.title}  />
+        {releaseMovieList.map((tile) => (
+          <GridListTile key={tile.id} className={classes.gridListTile} onClick={()=>{onTileClickHandler(tile.poster_url)}}>
+            <img src={tile.poster_url} alt={tile.title}  />
              <GridListTileBar
               title={tile.title}
-              subtitle={<span>by: {tile.author}</span>}
-              actionIcon={
-                <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                  <InfoIcon />
-                </IconButton>
-              }
+              subtitle={<span>Released on: {tile.release_date}</span>}
+  
             /> 
           </GridListTile>
         ))}

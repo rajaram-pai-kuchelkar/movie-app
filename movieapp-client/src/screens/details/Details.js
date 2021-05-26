@@ -1,4 +1,4 @@
-import React , {Fragment} from 'react';
+import React , {Fragment, useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import './Details.css';
@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme)=>({
 
 export default function Details(){
     const classes = useStyles();
+    const [selectedMovie,setSelectedMovie] = useState("");
+    useEffect(()=>{
+          setSelectedMovie(window.sessionStorage.getItem('selected-movie'));
+          
+    },[]);
+
 return (
    <React.Fragment>
         <div>
@@ -47,7 +53,7 @@ return (
        
            
             <div className="details-can-leftpane">
-                <img width= '100%' src={imagecommon} alt= "selected movie" />
+                <img width= '100%' src={selectedMovie} alt= "selected movie" />
             </div>
             <div className="details-can-middlepane">
             <Typography className={classes.subtitle} variant="h6" component="h6" gutterBottom>
@@ -85,7 +91,7 @@ return (
             <GridList className={classes.gridList} cellHeight={150} cols={2}>
         {artistData.map((tile) => (
           <GridListTile key={tile.id}>
-            <img src= {require(`../../assets/images/${tile.img}`)} alt={tile.firstName}/>
+            <img src= {require(`../../assets/images/${tile.img}`).default} alt={tile.firstName}/>
             <GridListTileBar
               classes={classes.title}
               title={tile.firstName}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -6,6 +6,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import movieData from '../../assets/data/movieData';
+import { MovieFilterSharp } from '@material-ui/icons';
 
 
 const useStyles = makeStyles(theme=>({
@@ -32,6 +33,28 @@ const useStyles = makeStyles(theme=>({
   },
 }));
 
+
+async function getMovies() {
+  
+return new Promise(async (resolve,reject)=>{  
+  try {
+      const rawResponse = await fetch('/api/v1/movies', {
+          method: 'GET',
+      });
+
+      const result = await rawResponse.json();
+      if(rawResponse.ok ) {     
+          resolve(result);
+
+      } else {
+          const error = new Error();
+          error.message = result.message || 'Something went wrong.';
+      }
+  } catch(e) {
+      alert(`Error: ${e.message}`);
+  }
+});
+}
 /**
  * The example data is structured as follows:
  *
@@ -49,16 +72,36 @@ const useStyles = makeStyles(theme=>({
  *   },
  * ];
  */
-
+ 
 
 const MovieUpcomingList= ()=> {
   const classes = useStyles();
+  const [movieList,setMovieList] = useState([]);
+  
+
+  const loadMovies = async ()=>{
+    const rawResponse = await  fetch('/api/v1/movies');
+    const {movies} = await rawResponse.json();
+    const upcomingMovies= await movies.filter((movie)=>{
+      return (movie.status=="PUBLISHED")});
+    setMovieList( upcomingMovies);        
+  }
+  
+  useEffect(()=>{
+   loadMovies();
+  },[]
+  );
+  
+  //const upcomingMovies = movieList.filter((movie)=>
+  //{ return (movie.status === "PUBLISHED");}
+  //);
+
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cellHeight={250} cols={6}>
-        {movieData.map((tile) => (
-          <GridListTile key={tile.img}>
-            <img src= {require(`../../assets/images/${tile.img}`)} alt={tile.title}/>
+        {movieList.map((tile) => (
+          <GridListTile key={tile.id}>
+            <img src= {tile.poster_url} alt={tile.title}/>
             <GridListTileBar
               title={tile.title}
               classes={{
@@ -79,3 +122,6 @@ const MovieUpcomingList= ()=> {
 }
 
 export default MovieUpcomingList;
+
+
+

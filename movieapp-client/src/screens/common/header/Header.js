@@ -27,10 +27,16 @@ export default function Header(){
         history.push('/login');
     }
     const [isOpen, setIsOpen] = useState(false);
+    const [loginTitle, setLoginTitle] = useState("Login");
 
     function toggleModal() {
-      setIsOpen(!isOpen);
+      if(loginTitle === "Login")
+        setIsOpen(!isOpen);
+      else
+        setLoginTitle("Login");
+
     }
+
   
     return(
 <div className= "header">
@@ -45,11 +51,11 @@ export default function Header(){
             
      >
         
-            <Login toggleModal={toggleModal} />
+     <Login loginTitle = {loginTitle} setLoginTitle={setLoginTitle} toggleModal={toggleModal} from={"Header.js"}/>
     </Modal>
 
     <div className= "header-button" >
-        <Button id="btn-login" variant="contained" onClick = {toggleModal} >Login</Button>
+        <Button id="btn-login" variant="contained" onClick = {toggleModal} >{loginTitle}</Button>
     </div>    
 </div>
     );

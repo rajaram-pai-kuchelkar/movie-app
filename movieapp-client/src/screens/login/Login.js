@@ -1,4 +1,4 @@
-import React , {Fragment} from 'react';
+import React , {Fragment,useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import './Login.css';
@@ -13,7 +13,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { CenterFocusStrong } from '@material-ui/icons';
+import { CenterFocusStrong, Panorama } from '@material-ui/icons';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   formcontrol: {
     display: 'flex',
     width : 300,
-    marginTop:theme.spacing(1.5), 
+    marginTop:1.5, 
     marginLeft:34,
 
   },
@@ -83,15 +83,63 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
+async function login(props, email, password) {
+  const param = window.btoa(`${email}:${password}`);
+  console.log(param);
+  try {
+      const rawResponse = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+      
+          headers: {
+            
+            "Content-Type": "application/json", 
+            authorization: `Basic ${param}`
+          }
+      });
+
+      const result = await rawResponse.json();
+      if(rawResponse.ok || rawResponse.Accepted) {
+          window.sessionStorage.setItem('user-details', JSON.stringify(result));
+          window.sessionStorage.setItem('access-token', rawResponse.headers.get('access-token'));
+          console.log('login successful');
+          props.toggleModal();
+          props.setLoginTitle("Logout");
+
+      } else {
+          const error = new Error();
+          error.message = result.message || 'Something went wrong.';
+      }
+  } catch(e) {
+      alert(`Error: ${e.message}`);
+  }
+}
+
+const foo = (props)=>{
+  console.log("user name inside foo is" , props.from);
+}
+
+
 export default function Login(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [username,setUsername] = useState("");
+  const [password,setPassword] = useState("");
+  const temp = "temp";
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+const onClickLoginHandler =(props)=>{
+  
+    login(props,username,password);
+  
+
+}
   return (
+    <Fragment>
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs value={value} 
@@ -108,16 +156,23 @@ export default function Login(props) {
       
         <FormControl className={classes.formcontrol}>
           <InputLabel htmlFor="username">Username</InputLabel>
-          <Input required type="text" id="username" />
+          <Input required type="text" id="username" onChange={e=>setUsername(e.target.value)} />
         </FormControl>
 
         <FormControl className={classes.formcontrol} >
           <InputLabel htmlFor="password">Password</InputLabel>
-          <Input required type="password" id="password"  />  
+          <Input required type="password" id="password" onChange={e=>setPassword(e.target.value)} />  
         </FormControl>
-        <Button  className={classes.btn} id="btn-login" color="primary" variant="contained" onClick = {props.toggleModal} >Login</Button>
+      {/*  <Button  className={classes.btn} id="btn-login" color="primary" variant="contained" onClick = {props.toggleModal} >Login</Button> */}
+        <Button  className={classes.btn} id="btn-login" color="primary" variant="contained" onClick = {()=>{onClickLoginHandler(props)}}>Login</Button>
+      
+      
       </TabPanel>
+      
+      
       <TabPanel value={value} index={1}>
+      
+      
       <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="username">First Name</InputLabel>
           <Input required type="text" id="FirstName" aria-describedby="helper-firstname"/>
@@ -151,5 +206,6 @@ export default function Login(props) {
       
       
     </div>
+    </Fragment>
   );
 }

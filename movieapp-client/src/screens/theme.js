@@ -8,9 +8,7 @@ const theme= createMuiTheme({
       primary: blue,
       background : Paper,
     },
-    spacing:{
-        unit: 10,
-    },
+   
     typography: { 
                 useNextVariants: true,
               }

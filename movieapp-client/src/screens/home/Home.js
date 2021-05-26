@@ -6,12 +6,12 @@ import MovieReleaseList from '../movie-release-list/MovieReleaseList';
 import MovieReleaseFilter from '../movie-release-filter/MovieReleaseFilter';
 
 
-export default function Home(){
+export default function Home(props){
     
 return (
     <Fragment>
    
-        <Header />
+        <Header {...props} />
         
         <div className= "movie-subheading">Upcoming Movies</div>
         <MovieUpcomingList />
