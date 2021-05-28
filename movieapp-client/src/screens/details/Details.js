@@ -12,6 +12,7 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import artistData from '../../assets/data/artistData';
+import ReactPlayer from 'react-player'
 
 const useStyles = makeStyles((theme)=>({
   
@@ -39,47 +40,58 @@ const useStyles = makeStyles((theme)=>({
 
 export default function Details(){
     const classes = useStyles();
-    const [selectedMovie,setSelectedMovie] = useState("");
-    useEffect(()=>{
-          setSelectedMovie(window.sessionStorage.getItem('selected-movie'));
-          
-    },[]);
+    const [selectedMovieDetails, setSelectedMovieDetails] = useState({"artists":[]});
+    const [genres,setGenres] = useState("");
 
+    useEffect(()=>{        
+        loadSelectedMovie(window.sessionStorage.getItem('selected-movie-id'));
+    },[]);
+   
+    const loadSelectedMovie = async (movieId)=>{
+        const rawResponse = await  fetch(`/api/v1/movies/${movieId}`);
+        const movie = await rawResponse.json();
+        if ( rawResponse.ok)
+            setSelectedMovieDetails( movie);
+            const gentotal = movie.genres.reduce((sum,item)=>(sum+", "+item));
+            setGenres(gentotal);
+      }
+    
 return (
    <React.Fragment>
-        <div>
+        <div >
         <Header />
-        <div className="details-can">
-       
-           
+        <div className="details-can">          
             <div className="details-can-leftpane">
-                <img width= '100%' src={selectedMovie} alt= "selected movie" />
+                <img width= '100%' src={selectedMovieDetails.poster_url} alt= "selected movie" />
             </div>
             <div className="details-can-middlepane">
             <Typography className={classes.subtitle} variant="h6" component="h6" gutterBottom>
-                Movie Name
+                {selectedMovieDetails.title}
+            </Typography>
+            
+            <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
+                
+                <b>Genre :</b>{genres}
+            </Typography>
+
+            <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
+                <b>Duration :</b>{selectedMovieDetails.duration}
             </Typography>
             <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
-                <b>Genre :</b>Action, Adventure, Sci-Fi
+                <b>Release Date :</b>{selectedMovieDetails.release_date}
             </Typography>
             <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
-                <b>Duration :</b>148
-            </Typography>
-            <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
-                <b>Release Date :</b>Fri Jul 16 2010
-            </Typography>
-            <Typography className={classes.subtitle} variant="subtitle1" gutterBottom>
-                <b>Rating :</b>8
+                <b>Rating :</b>{selectedMovieDetails.rating}
             </Typography>
             <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
-                <b>Plot :</b>Details of the Plot of this movie
+                <b>Plot :</b> <a href={selectedMovieDetails.wiki_url}>{`{Wiki Link}`}</a>{selectedMovieDetails.storyline} 
             </Typography>
             <Typography  className={`${classes.subtitle} ${classes.plot}`} variant="subtitle1" gutterBottom>
                 <b>Trailer :</b>
             </Typography>
-            <video width='100%' controls src={video1}  />
-            </div>
+            <ReactPlayer width='100%' url={selectedMovieDetails.trailer_url} />
             
+            </div>           
             <div className="details-can-rightpane">
             <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
                 <b>Rate this movie : </b>
@@ -89,15 +101,17 @@ return (
                 <b>Artists : </b>
             </Typography>
             <GridList className={classes.gridList} cellHeight={150} cols={2}>
-        {artistData.map((tile) => (
+        
+        {selectedMovieDetails.artists.map((tile) => (
           <GridListTile key={tile.id}>
-            <img src= {require(`../../assets/images/${tile.img}`).default} alt={tile.firstName}/>
+            <img src= {tile.profile_url} alt={tile.first_name}/>
             <GridListTileBar
               classes={classes.title}
-              title={tile.firstName}
+              title={`${tile.first_name} ${tile.last_name}`}
              />
            </GridListTile>
         ))}
+        
             </GridList>
             
             </div>
@@ -109,5 +123,6 @@ return (
     </React.Fragment>
 
 );
+        
 
 }

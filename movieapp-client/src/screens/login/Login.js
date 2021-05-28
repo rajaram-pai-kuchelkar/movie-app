@@ -106,6 +106,8 @@ async function login(props, email, password) {
           console.log('login successful');
           props.toggleModal();
           props.setLoginTitle("Logout");
+          props.setVisibility();
+          
 
       } else {
           const error = new Error();

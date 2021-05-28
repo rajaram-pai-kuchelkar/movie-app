@@ -5,11 +5,11 @@
    background-color:  #222;
    height: 36px;
    padding : 8px 32px 8px 16px;
-   
-
    align-items: center;
 
 }
+
+
 /* 
 .header div:nth-child(1){
     position: absolute;
@@ -22,7 +22,7 @@
     margin-right: 20px;
 }
 */
-
+/* 
 .header div {
     width:100%;
 }
@@ -31,15 +31,28 @@
     text-align: right;;
     width:150px;
 }
+*/
+#header-logo-container {
+    flex : 1 1 0;
+}
 
 #header-logo-container-logo {
     background-color: #ff7f7f;
     /* -webkit-animation:spin 8s linear infinite; */
+    
 }
 
-#btn-login {
-    /* background-color:green; */
+#header-button-booking{
+    width : 150px;   
+    justify-self: right;    
 }
+
+#header-button-login{
+    width : 80px;
+    
+    justify-self: right;
+}
+
 
 @-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
 

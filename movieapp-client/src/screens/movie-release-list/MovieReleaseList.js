@@ -73,10 +73,11 @@ export default function MovieReleaseList() {
    },[]
    );
  
-   const onTileClickHandler= (selectedMovie)=>{
+   const onTileClickHandler= (selectedMovie,movieId)=>{
   //e.preventDefault();
   console.log("key is ",selectedMovie);
   window.sessionStorage.setItem('selected-movie', selectedMovie);
+  window.sessionStorage.setItem('selected-movie-id', movieId);
   history.push('/details');
  }
   return (
@@ -87,7 +88,7 @@ export default function MovieReleaseList() {
       </GridListTile> */}
 
         {releaseMovieList.map((tile) => (
-          <GridListTile key={tile.id} className={classes.gridListTile} onClick={()=>{onTileClickHandler(tile.poster_url)}}>
+          <GridListTile key={tile.id} className={classes.gridListTile} onClick={()=>{onTileClickHandler(tile.poster_url,tile.id)}}>
             <img src={tile.poster_url} alt={tile.title}  />
              <GridListTileBar
               title={tile.title}

@@ -131,8 +131,8 @@ const handleDateChange = (e)=> {
       
       
         <TextValidator id="movie-name" className={classes.carditems} label="Movie Name" 
-         validators={['required']}
-         errorMessages={['Movie Name cannot be empty']}
+         // validators={['required']}
+         //errorMessages={['Movie Name cannot be empty']} 
          placeholder="Movie Name" 
          ></TextValidator>
 

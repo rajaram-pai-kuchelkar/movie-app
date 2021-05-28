@@ -7,7 +7,7 @@
 }
 
 div[class ^="details-can"] {
-    border: 1px solid black;
+    border: 0.1px dotted rgb(235, 169, 169);
     
 }
 
