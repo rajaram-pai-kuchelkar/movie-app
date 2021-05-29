@@ -14,6 +14,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { CenterFocusStrong, Panorama } from '@material-ui/icons';
+import {useDispatch} from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -76,17 +77,24 @@ const useStyles = makeStyles((theme) => ({
      
   },
   btn:{
-      marginTop : 30,
+      marginTop : 20,
       marginLeft : '50%',
       transform : 'translateX(-50%)',
-  }
+  },
+  subtitle : {
+    textAlign : 'center',
+    paddingTop : '1rem',
+    color : theme.palette.primary.main,
+  },
+
 
 }));
 
 
 
-async function login(props, email, password) {
+async function login(dispatch, email, password) {
   const param = window.btoa(`${email}:${password}`);
+  
   console.log(param);
   try {
       const rawResponse = await fetch('/api/v1/auth/login', {
@@ -104,9 +112,10 @@ async function login(props, email, password) {
           window.sessionStorage.setItem('user-details', JSON.stringify(result));
           window.sessionStorage.setItem('access-token', rawResponse.headers.get('access-token'));
           console.log('login successful');
-          props.toggleModal();
-          props.setLoginTitle("Logout");
-          props.setVisibility();
+         
+          const data = {isOpen:false, loginTitle:"Logout", visibility: "visibile"};
+          dispatch({"type": "LOGIN_SETUP" , payload : data });
+
           
 
       } else {
@@ -122,12 +131,46 @@ const foo = (props)=>{
   console.log("user name inside foo is" , props.from);
 }
 
+const postData = async(params,setMessage)=>{
+  try {
+    const rawResponse = await fetch('/api/v1/signup', {
+      body: JSON.stringify(params), 
+      method: 'POST',
+    
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json;charset=UTF-8"
+         
+        }
+    });
+
+    const result = await rawResponse.json();
+    if(rawResponse.ok) {
+        console.log('register successful');
+        setMessage("Registration Successful. Please Login! ");  
+    } else {
+        const error = new Error();
+        error.message = result.message || 'Something went wrong.';
+    }
+} catch(e) {
+    alert(`Error: ${e.message}`);
+}
+
+}
 
 export default function Login(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
+  const [fname,setFname] = useState("");
+  const [lname,setLname] = useState("");
+  const [email,setEmail] = useState("");
+  const [regpassword,setRegpassword] = useState("");
+  const [contact, setContact] = useState("");
+  const [message,setMessage] = useState("");
+  const dispatch = useDispatch();
+
   const temp = "temp";
 
   const handleChange = (event, newValue) => {
@@ -136,10 +179,25 @@ export default function Login(props) {
 
 const onClickLoginHandler =(props)=>{
   
-    login(props,username,password);
+    login(dispatch,username,password);
   
 
 }
+
+const onFormSubmitted = (e)=>{
+  e.preventDefault();
+  const params ={
+    "email_address": email,
+    "first_name": fname,
+    "last_name": lname,
+    "mobile_number": contact,
+    "password": regpassword
+  }
+  var result = postData(params,setMessage);
+
+    
+}
+
   return (
     <Fragment>
     <div className={classes.root}>
@@ -174,35 +232,38 @@ const onClickLoginHandler =(props)=>{
       
       <TabPanel value={value} index={1}>
       
-      
-      <FormControl required className={classes.formcontrol}>
-          <InputLabel htmlFor="username">First Name</InputLabel>
-          <Input required type="text" id="FirstName" aria-describedby="helper-firstname"/>
-          <FormHelperText id="helper-firstname">required</FormHelperText>
+      <form  onSubmit={onFormSubmitted}>
+        <FormControl required className={classes.formcontrol}>
+          <InputLabel htmlFor="Firstname">First Name</InputLabel>
+          <Input required type="text" id="Firstname" onChange={(e)=>{setFname(e.target.value)}} aria-describedby="helper-firstname"/>
+          <FormHelperText id="helper-firstname"></FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
-          <InputLabel htmlFor="username">Last Name</InputLabel>
-          <Input required type="text" id="LastName" aria-describedby="helper-lastname"/>
-          <FormHelperText id="helper-lastname">required</FormHelperText>
+          <InputLabel htmlFor="Lastname">Last Name</InputLabel>
+          <Input required type="text" id="Lastname" onChange={(e)=>{setLname(e.target.value)}} aria-describedby="helper-lastname"/>
+          <FormHelperText id="helper-lastname"></FormHelperText>
         </FormControl>
 
         <FormControl required className={classes.formcontrol}>
-          <InputLabel htmlFor="username">Username</InputLabel>
-          <Input required type="text" id="Email" aria-describedby="helper-username"/>
-          <FormHelperText id="helper-username">required</FormHelperText>
+          <InputLabel htmlFor="Email">Username</InputLabel>
+          <Input required type="text" id="Email" onChange={(e)=>{setEmail(e.target.value)}} aria-describedby="helper-username"/>
+          <FormHelperText id="helper-username"></FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
-          <InputLabel htmlFor="username">Password</InputLabel>
-          <Input required type="password" id="Password" aria-describedby="helper-password"/>
-          <FormHelperText id="helper-password">required</FormHelperText>
+          <InputLabel htmlFor="Password">Password</InputLabel>
+          <Input required type="password" id="Password" onChange={(e)=>{setRegpassword(e.target.value)}} aria-describedby="helper-password"/>
+          <FormHelperText id="helper-password"></FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
-          <InputLabel htmlFor="username">Contact Number</InputLabel>
-          <Input required type="tel" id="Password" aria-describedby="helper-tel"/>
-          <FormHelperText id="helper-tel">required</FormHelperText>
+          <InputLabel htmlFor="Contact">Contact Number</InputLabel>
+          <Input required type="tel" id="Contact" onChange={(e)=>{setContact(e.target.value)}} aria-describedby="helper-tel"/>
+          <FormHelperText id="helper-tel"></FormHelperText>
         </FormControl>
-        <Button  className={classes.btn} id="btn-login" color="primary" variant="contained" onClick = {props.toggleModal} >Register</Button>
-
+        <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
+                {message}
+            </Typography>
+        <Button  className={classes.btn} id="btn-login" color="primary" variant="contained" type="submit" >Register</Button>
+        </form>
       </TabPanel>
 
       

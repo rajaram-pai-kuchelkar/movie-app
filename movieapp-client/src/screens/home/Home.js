@@ -1,4 +1,4 @@
-import React , {Fragment, useState} from 'react';
+import React , {Fragment, useEffect, useState} from 'react';
 import './Home.css';
 import Header from '../common/header/Header';
 import MovieUpcomingList from '../movie-upcoming-list/MovieUpcomingList';
@@ -7,7 +7,11 @@ import MovieReleaseFilter from '../movie-release-filter/MovieReleaseFilter';
 
 
 export default function Home(props){
+    const [isOpen, setIsOpen] = useState(false);
+    const [loginTitle, setLoginTitle] = useState("Login");
+    const [visibility, setVisibility] = useState("hidden");
     
+  
 return (
     <Fragment>
    

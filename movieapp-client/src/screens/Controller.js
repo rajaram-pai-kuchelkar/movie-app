@@ -5,8 +5,11 @@ import Home from './home/Home';
 import Login from './login/Login';
 import Details from './details/Details';
 
+
 export default function Controller() {
     
+  
+
 return (
 <Fragment>
    <Router>

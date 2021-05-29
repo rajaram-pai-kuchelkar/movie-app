@@ -1,5 +1,5 @@
 
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import './Header.css';
@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import Modal from "react-modal";
 import Login from '../../login/Login';
 import { makeStyles } from '@material-ui/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { FormatColorResetRounded } from '@material-ui/icons';
 
 Modal.setAppElement("#root");
 const styles = {
@@ -24,30 +26,33 @@ const styles = {
 };
 
 
-export default function Header(){
+export default function Header(props){
     const history = useHistory();
+    const dispatch = useDispatch();
     const onClickHandler = ()=> {
         history.push('/login');
+        
     }
-    const [isOpen, setIsOpen] = useState(false);
-    const [loginTitle, setLoginTitle] = useState("Login");
-    const [visibility, setVisibility] = useState("hidden");
-    
+    const loginsetup = useSelector(state=>state.loginsetup);
+
 
     const useStyles = makeStyles(()=>({
         displayType:{
-            visibility: visibility,
+            visibility: loginsetup.visibility,
         },
     }));
     
     function toggleModal() {
-      if(loginTitle === "Login"){
-        setIsOpen(!isOpen);
-
-      }
-      else {
-        setLoginTitle("Login");
-        setVisibility("hidden");
+      
+        const data = {isOpen:!loginsetup.isOpen}
+        dispatch({"type" : "LOGIN_SETUP", payload: data});
+      
+      if(loginsetup.loginTitle==="Login"){
+        const data = {isOpen:!loginsetup.isOpen, loginTitle: "Login", visibility : "hidden"}
+        dispatch({"type" : "LOGIN_SETUP", payload: data});
+      }else{
+        const data = { loginTitle: "Login", visibility : "hidden"}
+        dispatch({"type" : "LOGIN_SETUP", payload: data});
       }
       
 
@@ -60,22 +65,22 @@ export default function Header(){
         <img id= "header-logo-container-logo" src={logo} alt="logo" height= "35px"/>
     </div>
     <Modal
-             isOpen={isOpen}
+             isOpen={loginsetup.isOpen}
              onRequestClose={toggleModal}
              contentLabel="Login"
              className="modal"
             
      >
         
-     <Login loginTitle = {loginTitle} setVisibility={setVisibility} setLoginTitle={setLoginTitle} toggleModal={toggleModal} from={"Header.js"}/>
+     <Login toggleModal={toggleModal} from={"Header.js"}/>
     </Modal>
 
     <div  id = "header-button-booking" >
-        <Button id="btn-booking" className={classes.displayType} variant="contained" type="primary"  >Book My Show</Button>
+        <Button id="btn-booking" className={classes.displayType} variant="contained" color="primary">Book Show</Button>
         
    </div> 
    <div id = "header-button-login" >
-        <Button  id="btn-login"  variant="contained" onClick = {toggleModal} >{loginTitle}</Button>
+        <Button  id="btn-login"  variant="contained" onClick = {toggleModal} >{loginsetup.loginTitle}</Button>
    
    </div>   
 
