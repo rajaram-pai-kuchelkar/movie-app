@@ -13,35 +13,63 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import artistData from '../../assets/data/artistData';
 import ReactPlayer from 'react-player'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-const useStyles = makeStyles((theme)=>({
-  
-    root: {
-      minWidth: 275,
-    },
-    subtitle: {
-      lineHeight : 1,
-    },
-    plot:{
-        marginTop : 16,
-    },
-    gridList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-        width:'100%',
-      },
-      titleBar: {
-        background:
-          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-      },
-
-}));
 
 export default function Details(){
-    const classes = useStyles();
+    
     const [selectedMovieDetails, setSelectedMovieDetails] = useState({"artists":[]});
     const [genres,setGenres] = useState("");
+    const [starColor,setStarColor] = useState(['black','black', 'black','black', 'black']);
+    const [starColor0,setStarColor0] = useState('black');
+    const [starColor1,setStarColor1] = useState('black');
+    const [starColor2,setStarColor2] = useState('black');
+    const [starColor3,setStarColor3] = useState('black');
+    const [starColor4,setStarColor4] = useState('black');
+    const useStyles = makeStyles({
+  
+        root: {
+          minWidth: 275,
+        },
+        subtitle: {
+          lineHeight : 1,
+        },
+        plot:{
+            marginTop : 16,
+        },
+        gridList: {
+            flexWrap: 'nowrap',
+            // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+            transform: 'translateZ(0)',
+            width:'100%',
+          },
+          titleBar: {
+            background:
+              'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+          },
+          starColor0 :{
+              color : starColor[0],
+          },
+          starColor1 :{
+            color : starColor[1],
+            },
+            starColor2 :{
+                color : starColor[2],
+            },
+            starColor3 :{
+                color : starColor[3],
+            },
+            starColor4 :{
+                color : starColor[4],
+            },
+        
+    
+    
+    });
+    
+    
+    
+    const classes = useStyles();
 
     useEffect(()=>{        
         loadSelectedMovie(window.sessionStorage.getItem('selected-movie-id'));
@@ -55,12 +83,25 @@ export default function Details(){
             const gentotal = movie.genres.reduce((sum,item)=>(sum+", "+item));
             setGenres(gentotal);
       }
-    
-return (
-   <React.Fragment>
+    const onClickStarHandler=(starId)=>{
+        let starColorObj = [];
+        for(let i=0;i<=starId;i++){
+            starColorObj.push('yellow');
+        }
+        setStarColor(starColorObj);
+
+    }
+
+
+    return (
+    <React.Fragment>
         <div >
         <Header />
-        <div className="details-can">          
+        <div className = "back-to-home">
+        <a href= "/" id="back-to-home-link"> <ArrowBackIosIcon/><Typography className="back-to-home-text">back to home </Typography></a> 
+        </div>  
+        <div className="details-can"> 
+                 
             <div className="details-can-leftpane">
                 <img width= '100%' src={selectedMovieDetails.poster_url} alt= "selected movie" />
             </div>
@@ -96,7 +137,11 @@ return (
             <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
                 <b>Rate this movie : </b>
             </Typography>
-            <StarOutlineIcon></StarOutlineIcon><StarOutlineIcon></StarOutlineIcon><StarOutlineIcon></StarOutlineIcon><StarOutlineIcon></StarOutlineIcon><StarOutlineIcon></StarOutlineIcon>
+            <StarOutlineIcon className={classes.starColor0} onClick={()=>{onClickStarHandler(0)}}></StarOutlineIcon>
+            <StarOutlineIcon className={classes.starColor1} onClick={()=>{onClickStarHandler(1)}}></StarOutlineIcon>
+            <StarOutlineIcon className={classes.starColor2} onClick={()=>{onClickStarHandler(2)}}></StarOutlineIcon>
+            <StarOutlineIcon className={classes.starColor3} onClick={()=>{onClickStarHandler(3)}}></StarOutlineIcon>
+            <StarOutlineIcon className={classes.starColor4} onClick={()=>{onClickStarHandler(4)}}></StarOutlineIcon>
             <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
                 <b>Artists : </b>
             </Typography>

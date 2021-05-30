@@ -16,3 +16,5 @@ Fifth Commit : Login Register - functionality is completed. Toggling of Login / 
 Sixth Commit : Movie Filter is populated with Genres and Artists info.
 
 Seventh Commit : Movie Filter is in action
+
+Eighth Commit : On details page, Star Ratings is completed, Back to Home button is provided.
