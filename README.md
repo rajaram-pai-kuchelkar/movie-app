@@ -14,3 +14,5 @@ Fourth Commit : Dummy Data on Details Page is replaced by Actual Data. Used wind
 Fifth Commit : Login Register - functionality is completed. Toggling of Login / Logout buttons is attended. For maintaining a proper state between different components and pages, Redux concept is used here.
 
 Sixth Commit : Movie Filter is populated with Genres and Artists info.
+
+Seventh Commit : Movie Filter is in action

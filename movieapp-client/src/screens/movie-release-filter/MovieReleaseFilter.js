@@ -29,6 +29,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 
 import theme from '../theme';
 import { grey } from '@material-ui/core/colors';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -90,6 +91,8 @@ export default function MovieReleaseFilter() {
 
   const [fromDate, setFromDate]= useState("");
   const [toDate, setToDate] = useState("");
+  const releaseMoviesList = useSelector(state=>state.movies);
+  const dispatch = useDispatch();
 
   const loadGenres = async ()=>{
     const rawResponse = await  fetch('/api/v1/genres');
@@ -122,8 +125,51 @@ export default function MovieReleaseFilter() {
  
   const  onFormSubmitted = (e) => {
     e.preventDefault();  
-    console.log("form submitted"); 
-    console.log(artistsName);
+    //console.log("form submitted"); 
+    //console.log(artistsName);
+    console.log(releaseMoviesList.length);
+    const toBeFiltered = [...releaseMoviesList];
+    
+    const filteredMovies = toBeFiltered.filter((movie)=>{
+      let filter = true;
+      
+      if (!(movie.title.toLowerCase()===movieName.toLowerCase()))
+        filter = false;
+      genresName.map((item)=>{
+        if(movie.genres.includes(item)){
+            filter=true;
+        }
+      });
+      movie.artists.map((item)=>{
+        if(artistsName.includes(`${item.first_name} ${item.last_name}`)){
+            filter=true;
+        }
+      });
+
+      console.log('from Date :', fromDate);
+      console.log('to Date :', toDate);
+      if (fromDate=="" && !toDate==""){
+        if(movie.release_date<toDate){
+          filter = true;
+        }
+      }
+      else if(!fromDate=="" && toDate==""){
+        if(movie.release_date>fromDate)
+          filter = true;
+      }
+      else if(!fromDate=="" && !toDate==""){
+          if(movie.release_date>fromDate && movie.release_date<toDate)
+              filter = true;
+      }
+      
+      if ((movieName=="" && genresName.length==0 && artistsName.length==0 && fromDate=="" && toDate==""))
+        filter = true;
+
+      return filter;  
+    });
+    dispatch({"type":"FILTERED_MOVIES", payload : filteredMovies});
+
+
   }
 
   
@@ -204,6 +250,7 @@ return (
                 label="Release Date Start"
                 type="date"
                 format="dd-MM-yyyy"
+                onChange = {(e)=>{setFromDate(e.target.value)}}
                 className={classes.carditems}
                 InputLabelProps={{
                   shrink: true,
@@ -217,6 +264,7 @@ return (
                 label="Release Date End"
                 type="date"
                 format="dd-MM-yyyy"
+                onChange = {(e)=>{setToDate(e.target.value)}}
                 className={classes.carditems}
                 InputLabelProps={{
                   shrink: true,

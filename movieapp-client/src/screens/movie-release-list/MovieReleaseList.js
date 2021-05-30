@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import movieData from '../../assets/data/movieData';
 import { Link,useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
   root: {
@@ -59,19 +60,25 @@ const useStyles = makeStyles({
 export default function MovieReleaseList() {
   const classes = useStyles();
   const history = useHistory([]);
-  const [releaseMovieList,setReleaseMovieList] = useState([]);
+  const dispatch = useDispatch();
+  const releaseMovieList = useSelector(state=>state.filteredMovies);
+
   const loadMovies = async ()=>{
     const rawResponse = await  fetch('/api/v1/movies');
     const {movies} = await rawResponse.json();
-    const releasedMovies= await movies.filter((movie)=>{
-      return (movie.status=="RELEASED")});
-    setReleaseMovieList( releasedMovies);        
+    if(rawResponse.ok){
+      const releasedMovies= movies.filter((movie)=>{
+                  return (movie.status=="RELEASED")});
+      //setReleaseMovieList( releasedMovies);   
+      dispatch({"type": "MOVIES",payload: releasedMovies });
+      dispatch({"type": "FILTERED_MOVIES", payload: releasedMovies});
+    }
   }
 
   useEffect(()=>{
     loadMovies();
    },[]
-   );
+  );
  
    const onTileClickHandler= (selectedMovie,movieId)=>{
   //e.preventDefault();
@@ -83,9 +90,6 @@ export default function MovieReleaseList() {
   return (
     <Fragment>
       <GridList cellHeight={350}  cols={4} className={classes.gridList}>
-      {/*   <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
-          <ListSubheader component="div">December</ListSubheader>
-      </GridListTile> */}
 
         {releaseMovieList.map((tile) => (
           <GridListTile key={tile.id} className={classes.gridListTile} onClick={()=>{onTileClickHandler(tile.poster_url,tile.id)}}>

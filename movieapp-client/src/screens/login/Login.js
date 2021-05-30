@@ -115,9 +115,6 @@ async function login(dispatch, email, password) {
          
           const data = {isOpen:false, loginTitle:"Logout", visibility: "visibile"};
           dispatch({"type": "LOGIN_SETUP" , payload : data });
-
-          
-
       } else {
           const error = new Error();
           error.message = result.message || 'Something went wrong.';
