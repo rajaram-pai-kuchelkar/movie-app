@@ -12,3 +12,5 @@ Third Commit : Dummy Data on Home Page is replaced by Actual Data from API calls
 Fourth Commit : Dummy Data on Details Page is replaced by Actual Data. Used windowSessionStorage to communicate between components.
 
 Fifth Commit : Login Register - functionality is completed. Toggling of Login / Logout buttons is attended. For maintaining a proper state between different components and pages, Redux concept is used here.
+
+Sixth Commit : Movie Filter is populated with Genres and Artists info.

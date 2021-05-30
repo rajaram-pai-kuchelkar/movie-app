@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, {Fragment, useState } from 'react';
+import React, {Fragment, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -71,200 +71,166 @@ const MenuProps = {
 
 
 export default function MovieReleaseFilter() {
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
   
+  const names = [ 'rakesj', 'krikesh', 'fooresh', 'pranesh'];
   const classes = useStyles();
-  const  onFormSubmitted = (e) => {
-    e.preventDefault();
-    
-    console.log("form submitted");
-  
-  }
 
   const bull = <span className={classes.bullet}>•</span>;
   const [text,setText] = useState("");
   const [personName, setPersonName] = React.useState([]);
   const [selectedDate,setSelectedDate] = React.useState(new Date());
   const [hasError,setHasError] = React.useState(false);
+  const [movieName, setMovieName] = useState("");
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
-  };
+  const [genres,setGenres] = useState([]);
+  const [genresName,setGenresName] = useState([]);
 
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
+  const [artists,setArtists] = useState([]);
+  const [artistsName, setArtistsName] = useState([]);
+
+  const [fromDate, setFromDate]= useState("");
+  const [toDate, setToDate] = useState("");
+
+  const loadGenres = async ()=>{
+    const rawResponse = await  fetch('/api/v1/genres');
+    const {genres} = await rawResponse.json();
+    if (rawResponse.ok ){ 
+      let arr =[];
+      genres.map((item)=>{arr.push(item.genre);});
+      setGenres(arr);
     }
-    setPersonName(value);
+  }
+  
+  const loadArtists = async ()=>{
+    const rawResponse = await  fetch('/api/v1/artists');
+    const {artists} = await rawResponse.json();
+    if (rawResponse.ok ){ 
+        let arr =[];
+        artists.map((item)=>{
+          arr.push(`${item.first_name} ${item.last_name}`);
+      });
+      setArtists(arr);
+    }
+  }
+  
+  useEffect(()=>{
+    loadGenres();
+    loadArtists();
+   },[]
+   );
+   
+ 
+  const  onFormSubmitted = (e) => {
+    e.preventDefault();  
+    console.log("form submitted"); 
+    console.log(artistsName);
+  }
+
+  
+  const handleChangeArtists = (event) => {
+    setArtistsName(event.target.value);
+    
   };
 
-const handleDateChange = (e)=> {
-  setSelectedDate(e.target.value);
-}
+  const handleChangeGenres = (event) => {
+    setGenresName(event.target.value);
+  };
 
-  return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <Fragment>
-      
-    <Card className={classes.root}>
-     {/* <form className={classes.root} validate autoComplete="off"> */}
-   <ValidatorForm className={classes.root} onSubmit={onFormSubmitted}>
-      <CardContent>
-        <Typography className={classes.title}  gutterBottom>
-          FIND MOVIES BY :
-        </Typography>
-      
-      
-        <TextValidator id="movie-name" className={classes.carditems} label="Movie Name" 
-         // validators={['required']}
-         //errorMessages={['Movie Name cannot be empty']} 
-         placeholder="Movie Name" 
-         ></TextValidator>
+  const handleDateChange = (e)=> {
+    setSelectedDate(e.target.value);
+  }
 
-<FormControl className={classes.carditems} >
-       <InputLabel id="demo-mutiple-checkbox-label" >Genres</InputLabel>
-        <Select
+return (
+<MuiPickersUtilsProvider utils={DateFnsUtils}>
+  <Fragment>
         
-          labelId="demo-mutiple-checkbox-label"
-          id="demo-mutiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name} >
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-   
+      <Card className={classes.root}>
       
-      <FormControl className={classes.carditems} error={hasError}>
-       <InputLabel id="demo-mutiple-checkbox-label">Artists</InputLabel>
-        <Select
-          labelId="demo-mutiple-checkbox-label"
-          id="demo-mutiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name} >
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-        {hasError && <FormHelperText>This is required!</FormHelperText>}
-      </FormControl>
+    <form className={classes.root} onSubmit={onFormSubmitted}>
+            <CardContent>
+              <Typography className={classes.title}  gutterBottom>
+                FIND MOVIES BY :
+              </Typography>
+  
+              <FormControl className={classes.carditems}>
+                <InputLabel htmlFor="movie-name">Movie Name</InputLabel>
+                <Input type="text" placeholder="Movie Name" onChange={(e)=>setMovieName(e.target.value)}/>        
+              </FormControl>
+              <FormControl className={classes.carditems} >
+                <InputLabel id="demo-mutiple-checkbox-label" >Genres</InputLabel>
+                <Select
+                  labelId="demo-mutiple-checkbox-label"
+                  id="demo-mutiple-checkbox"
+                  multiple
+                  value={genresName}
+                  onChange={handleChangeGenres}
+                  input={<Input />}
+                  renderValue={(selected) => selected.join(', ')}
+                  MenuProps={MenuProps}
+                >
+                  {genres.map((item) => (
+                    <MenuItem key={item} value={item} >
+                      <Checkbox checked={genresName.indexOf(item) > -1} />
+                      <ListItemText primary={item} />
+                    </MenuItem>
+                  ))}
+                </Select>
+            </FormControl>        
+            
+            <FormControl className={classes.carditems} error={hasError}>
+              <InputLabel id="demo-mutiple-checkbox-label">Artists</InputLabel>
+              <Select
+                labelId="demo-mutiple-checkbox-label"
+                id="demo-mutiple-checkbox"
+                multiple
+                value={artistsName}
+                onChange={handleChangeArtists}
+                input={<Input />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {artists.map((name) => (
+                  <MenuItem key={name} value={name} >
+                    <Checkbox checked={artistsName.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-  <FormControl  error={hasError}>
-  <TextField
-    id="date"
-    label="Release Date Start"
-    type="date"
-    format="dd-MM-yyyy"
-    className={classes.carditems}
-    InputLabelProps={{
-      shrink: true,
-    }}
-  />
-  </FormControl>
+            <FormControl  error={hasError}>
+              <TextField
+                id="date"
+                label="Release Date Start"
+                type="date"
+                format="dd-MM-yyyy"
+                className={classes.carditems}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </FormControl>
 
-  <FormControl  error={hasError}>
-<TextField
-    id="date"
-    label="Release Date End"
-    type="date"
-    format="dd-MM-yyyy"
-    className={classes.carditems}
-    InputLabelProps={{
-      shrink: true,
-    }}
-  />
-</FormControl>
-
-
-
-      </CardContent>
-      <CardActions>
-        <Button className={classes.carditems} type="submit" variant="contained" color="primary">APPLY</Button>
-      </CardActions>
-      </ValidatorForm>
+            <FormControl  error={hasError}>
+              <TextField
+                id="date"
+                label="Release Date End"
+                type="date"
+                format="dd-MM-yyyy"
+                className={classes.carditems}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />            
+            </FormControl>
+        </CardContent>
+            <CardActions>
+              <Button className={classes.carditems} type="submit" variant="contained" color="primary">APPLY</Button>
+            </CardActions>
+      </form>
     </Card>
-    </Fragment>
-    </MuiPickersUtilsProvider>
+  </Fragment>
+</MuiPickersUtilsProvider>
     
-  );
+);
 }
-
-
-
-/*
- <Typography variant="h5" component="h2" color= {theme.palette.primary.main}>
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
-*/
-/* 
-
-<ValidatorForm className="subscriber-form" onSubmit={onFormSubmitted}>
-
-
-                    <TextValidator
-                        id="name"
-                        label="Enter Name"
-                        type="text"
-                        name="name"
-                        onChange={inputChangedHandler}
-                        value={name}
-                        validators={['required']}
-                        errorMessages={['Name cannot be empty']}
-                    >
-                    </TextValidator>
-
-
-
- <NativeSelect
-          className={classes.selectEmpty}
-           value={state.age}
-         name="age"
-           onChange={handleChange}
-          inputProps={{ 'aria-label': 'age' }}
-        >
-          <option value="" disabled>
-            Placeholder
-          </option>
-
-
-                    */

@@ -217,6 +217,7 @@ const onFormSubmitted = (e)=>{
         <FormControl className={classes.formcontrol}>
           <InputLabel htmlFor="username">Username</InputLabel>
           <Input required type="text" id="username" onChange={e=>setUsername(e.target.value)} />
+          
         </FormControl>
 
         <FormControl className={classes.formcontrol} >
@@ -236,28 +237,28 @@ const onFormSubmitted = (e)=>{
         <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="Firstname">First Name</InputLabel>
           <Input required type="text" id="Firstname" onChange={(e)=>{setFname(e.target.value)}} aria-describedby="helper-firstname"/>
-          <FormHelperText id="helper-firstname"></FormHelperText>
+          <FormHelperText id="helper-firstname">{fname==="" ?"Required": ""}</FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="Lastname">Last Name</InputLabel>
           <Input required type="text" id="Lastname" onChange={(e)=>{setLname(e.target.value)}} aria-describedby="helper-lastname"/>
-          <FormHelperText id="helper-lastname"></FormHelperText>
+          <FormHelperText id="helper-lastname">{lname==="" ? "Required": ""}</FormHelperText>
         </FormControl>
 
         <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="Email">Username</InputLabel>
           <Input required type="text" id="Email" onChange={(e)=>{setEmail(e.target.value)}} aria-describedby="helper-username"/>
-          <FormHelperText id="helper-username"></FormHelperText>
+          <FormHelperText id="helper-username">{email==="" ? "Required": ""}</FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="Password">Password</InputLabel>
           <Input required type="password" id="Password" onChange={(e)=>{setRegpassword(e.target.value)}} aria-describedby="helper-password"/>
-          <FormHelperText id="helper-password"></FormHelperText>
+          <FormHelperText id="helper-password">{regpassword==="" ?  "Required": ""}</FormHelperText>
         </FormControl>
         <FormControl required className={classes.formcontrol}>
           <InputLabel htmlFor="Contact">Contact Number</InputLabel>
           <Input required type="tel" id="Contact" onChange={(e)=>{setContact(e.target.value)}} aria-describedby="helper-tel"/>
-          <FormHelperText id="helper-tel"></FormHelperText>
+          <FormHelperText id="helper-tel">{contact==="" ? "Required": ""}</FormHelperText>
         </FormControl>
         <Typography  className={classes.subtitle} variant="subtitle1" gutterBottom>
                 {message}

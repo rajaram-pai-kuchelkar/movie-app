@@ -1,0 +1,1 @@
+psql "dbname=moviedb host=localhost user=postgres password=postgres@123 port=5432 sslmode=require"
