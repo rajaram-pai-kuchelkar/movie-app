@@ -9,38 +9,22 @@
 
 }
 
-
-/* 
-.header div:nth-child(1){
-    position: absolute;
-    align-self: center;
-    left: 0;
-
-    
-}
-.header-button{
-    margin-right: 20px;
-}
-*/
-/* 
-.header div {
-    width:100%;
-}
-.header div:nth-child(n+2){
-    color:green;
-    text-align: right;;
-    width:150px;
-}
-*/
 #header-logo-container {
     flex : 1 1 0;
+    width : 100px;
 }
 
-#header-logo-container-logo {
-    background-color: #ff7f7f;
-    /* -webkit-animation:spin 8s linear infinite; */
-    
+@keyframes spin { 
+    100% { 
+        -webkit-transform: rotateY(360deg); 
+    } 
 }
+
+.header-logo-container-logo {
+    background-color: #ff7f7f; 
+    animation: spin 8s linear infinite;    
+}
+
 
 #header-button-booking{
     width : 150px;   
@@ -53,13 +37,9 @@
     justify-self: right;
 }
 
-
-@-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
-
 .modal{
     position: absolute;
 	top: 50%; left: 50%;
-	transform: translate(-50%, -50%);
-   
+	transform: translate(-50%, -50%);  
 }
 

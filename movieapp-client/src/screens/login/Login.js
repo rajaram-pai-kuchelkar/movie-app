@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { CenterFocusStrong, Panorama } from '@material-ui/icons';
 import {useDispatch} from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -92,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-async function login(dispatch, email, password) {
+async function login(dispatch, email, password, history) {
   const param = window.btoa(`${email}:${password}`);
   
   console.log(param);
@@ -113,8 +114,10 @@ async function login(dispatch, email, password) {
           window.sessionStorage.setItem('access-token', rawResponse.headers.get('access-token'));
           console.log('login successful');
          
-          const data = {isOpen:false, loginTitle:"Logout", visibility: "visibile"};
+          const data = {isOpen:false, loginTitle:"Logout", visibility: "hidden"};
           dispatch({"type": "LOGIN_SETUP" , payload : data });
+          history.push('/');
+          
       } else {
           const error = new Error();
           error.message = result.message || 'Something went wrong.';
@@ -167,6 +170,7 @@ export default function Login(props) {
   const [contact, setContact] = useState("");
   const [message,setMessage] = useState("");
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const temp = "temp";
 
@@ -176,7 +180,7 @@ export default function Login(props) {
 
 const onClickLoginHandler =(props)=>{
   
-    login(dispatch,username,password);
+    login(dispatch,username,password,history);
   
 
 }

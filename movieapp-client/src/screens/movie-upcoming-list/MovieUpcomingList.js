@@ -15,12 +15,11 @@ const useStyles = makeStyles(theme=>({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    overflow: 'hidden'
+    overflow: 'hidden',
     //backgroundColor: theme.palette.background.paper,
   },
   gridList: {
     flexWrap: 'nowrap',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
     width:'100%',
   },
@@ -55,23 +54,6 @@ return new Promise(async (resolve,reject)=>{
   }
 });
 }
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
  
 
 const MovieUpcomingList= ()=> {
@@ -92,10 +74,7 @@ const MovieUpcomingList= ()=> {
   },[]
   );
   
-  //const upcomingMovies = movieList.filter((movie)=>
-  //{ return (movie.status === "PUBLISHED");}
-  //);
-
+ 
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cellHeight={250} cols={6}>

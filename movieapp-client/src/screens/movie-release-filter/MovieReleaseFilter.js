@@ -125,8 +125,6 @@ export default function MovieReleaseFilter() {
  
   const  onFormSubmitted = (e) => {
     e.preventDefault();  
-    //console.log("form submitted"); 
-    //console.log(artistsName);
     console.log(releaseMoviesList.length);
     const toBeFiltered = [...releaseMoviesList];
     

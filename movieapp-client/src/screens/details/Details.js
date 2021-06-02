@@ -1,5 +1,6 @@
 import React , {Fragment, useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import './Details.css';
 import Header from '../common/header/Header';
@@ -14,9 +15,9 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import artistData from '../../assets/data/artistData';
 import ReactPlayer from 'react-player'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import {useDispatch, useSelector} from 'react-redux';
 
-
-export default function Details(){
+export default function Details(props){
     
     const [selectedMovieDetails, setSelectedMovieDetails] = useState({"artists":[]});
     const [genres,setGenres] = useState("");
@@ -26,6 +27,10 @@ export default function Details(){
     const [starColor2,setStarColor2] = useState('black');
     const [starColor3,setStarColor3] = useState('black');
     const [starColor4,setStarColor4] = useState('black');
+    const history = useHistory();
+    const loginsetup = useSelector(state=>state.loginsetup);
+    const dispatch = useDispatch();
+
     const useStyles = makeStyles({
   
         root: {
@@ -39,7 +44,6 @@ export default function Details(){
         },
         gridList: {
             flexWrap: 'nowrap',
-            // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
             transform: 'translateZ(0)',
             width:'100%',
           },
@@ -91,14 +95,18 @@ export default function Details(){
         setStarColor(starColorObj);
 
     }
-
+    const backToHomeHandler=()=>{
+        const data = {isOpen:false, loginTitle: loginsetup.loginTitle, visibility: "hidden"};
+        dispatch({"type": "LOGIN_SETUP" , payload : data });
+        history.push('/');
+    }
 
     return (
     <React.Fragment>
         <div >
         <Header />
-        <div className = "back-to-home">
-        <a href= "/" id="back-to-home-link"> <ArrowBackIosIcon/><Typography className="back-to-home-text">back to home </Typography></a> 
+        <div className = "back-to-home" onClick={backToHomeHandler}>
+            <ArrowBackIosIcon/><Typography className="back-to-home-text">back to home </Typography> 
         </div>  
         <div className="details-can"> 
                  

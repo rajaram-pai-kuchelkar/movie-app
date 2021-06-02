@@ -33,53 +33,39 @@ const BookShow = (props) => {
   const [originalShows, setOriginalShows] = useState([]);
   const [showId, setShowId] = useState("");
   const [movieId,setMovieId] = useState("");
-
-
-  const loadResponse = async()=>{
-    let dataShows = null;
-    try{
-    
-    const rawResponse = await fetch(`${props.baseUrl}/movies/${movieId}/shows`, {  
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-cache",
-    },
-    body: dataShows,
-  });
-  const response = await rawResponse.json();
-  if (rawResponse.ok) {
-   
-    setOriginalShows(response.shows);
-
-    let newLocations = [];
-
-    for (let show of response.shows) {
-      newLocations.push({
-        id: show.theatre.city,
-        location: show.theatre.city,
-      });
-    }
-
-    newLocations = newLocations.filter(
-      (loc, index, self) => index === self.findIndex((c) => c.id === loc.id)
-    );
-    setLocations(newLocations);
-} else {
-    const error = new Error();
-    error.message = 'Something went wrong.';
-    throw error;
-}
-}catch(e) {
-alert(e.message);
-}
-}
   
-  useEffect(() => {
-    setMovieId(window.sessionStorage.getItem('selected-movie-id'));
-    loadResponse();
-  },[]);
 
+  useEffect(() => {
+    let dataShows = null;
+    const movieId = window.sessionStorage.getItem('selected-movie-id')
+    /* fetch(props.baseUrl + "movies/" + props.match.params.id + "/shows", { */
+      fetch(`${props.baseUrl}/movies/${movieId}/shows`, {  
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+      },
+      body: dataShows,
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setOriginalShows(response.shows);
+
+        let newLocations = [];
+
+        for (let show of response.shows) {
+          newLocations.push({
+            id: show.theatre.city,
+            location: show.theatre.city,
+          });
+        }
+
+        newLocations = newLocations.filter(
+          (loc, index, self) => index === self.findIndex((c) => c.id === loc.id)
+        );
+        setLocations(newLocations);
+      });
+  }, []);
 
   const locationChangeHandler = (event) => {
     setLocation(event.target.value);
@@ -184,7 +170,7 @@ alert(e.message);
     }
 
     props.history.push({
-      pathname: "/confirm/"+{movieId},
+      pathname: "/confirm/" + props.match.params.id,
       bookingSummary: {
         location,
         theatre,
@@ -213,7 +199,7 @@ alert(e.message);
       <Header baseUrl={props.baseUrl} />
       <div className="bookShow">
         <Typography className="back">
-          <Link to={"/details"}>
+          <Link to={"/movie/" + props.match.params.id}>
             &#60; Back to Movie Details
           </Link>
         </Typography>

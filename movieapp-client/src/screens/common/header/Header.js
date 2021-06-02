@@ -41,16 +41,30 @@ export default function Header(props){
             visibility: loginsetup.visibility,
         },
     }));
-    
+
+    const onClickbookshowHandler=()=>{
+        if(loginsetup.loginTitle==="Login")
+             toggleModal();
+         else 
+             history.push('/bookshow');
+ 
+     }
     function toggleModal() {
       
-        const data = {isOpen:!loginsetup.isOpen}
-        dispatch({"type" : "LOGIN_SETUP", payload: data});
-      
-      if(loginsetup.loginTitle==="Login"){
+     
+      if(loginsetup.loginTitle==="Login" && loginsetup.visibility==="hidden"){
         const data = {isOpen:!loginsetup.isOpen, loginTitle: "Login", visibility : "hidden"}
         dispatch({"type" : "LOGIN_SETUP", payload: data});
-      }else{
+      }
+      else if ( loginsetup.loginTitle==="Logout" && loginsetup.visibility==="visible"){
+        const data = {isOpen:false, loginTitle: "Login", visibility : "visible"}
+        dispatch({"type" : "LOGIN_SETUP", payload: data});
+      }
+      else if ( loginsetup.loginTitle==="Login" && loginsetup.visibility==="visible"){
+        const data = {isOpen:!loginsetup.isOpen, loginTitle: "Login", visibility : "visible"}
+        dispatch({"type" : "LOGIN_SETUP", payload: data});
+      }
+      else{
         const data = { loginTitle: "Login", visibility : "hidden"}
         dispatch({"type" : "LOGIN_SETUP", payload: data});
       }
@@ -58,11 +72,13 @@ export default function Header(props){
 
     }
     const classes = useStyles();
+
+    
   
     return(
 <div className= "header">
     <div id= "header-logo-container">
-        <img id= "header-logo-container-logo" src={logo} alt="logo" height= "35px"/>
+        <img className= "header-logo-container-logo" src={logo} alt="logo" height= "35px"/>
     </div>
     <Modal
              isOpen={loginsetup.isOpen}
@@ -76,7 +92,7 @@ export default function Header(props){
     </Modal>
 
     <div  id = "header-button-booking" >
-        <Button id="btn-booking" className={classes.displayType} variant="contained" color="primary">Book Show</Button>
+        <Button id="btn-booking" className={classes.displayType} variant="contained" color="primary" onClick = {onClickbookshowHandler}>Book Show</Button>
         
    </div> 
    <div id = "header-button-login" >

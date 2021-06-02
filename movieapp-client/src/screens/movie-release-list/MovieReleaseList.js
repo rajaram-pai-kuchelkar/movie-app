@@ -24,12 +24,10 @@ const useStyles = makeStyles({
    flexWrap: 'wrap',
    justifyContent: 'space-around',
    overflow: 'hidden',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    //transform: 'translateY(0)',
-   // width:'100%',
+    
   },
   gridListTile:{
-   //width:'300px',
+   
    '&:hover' : {
      cursor : 'pointer',
    },
@@ -40,28 +38,13 @@ const useStyles = makeStyles({
   },
 });
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
+
 export default function MovieReleaseList() {
   const classes = useStyles();
   const history = useHistory([]);
   const dispatch = useDispatch();
   const releaseMovieList = useSelector(state=>state.filteredMovies);
+  const loginsetup = useSelector(state=>state.loginsetup);
 
   const loadMovies = async ()=>{
     const rawResponse = await  fetch('/api/v1/movies');
@@ -69,7 +52,7 @@ export default function MovieReleaseList() {
     if(rawResponse.ok){
       const releasedMovies= movies.filter((movie)=>{
                   return (movie.status=="RELEASED")});
-      //setReleaseMovieList( releasedMovies);   
+      
       dispatch({"type": "MOVIES",payload: releasedMovies });
       dispatch({"type": "FILTERED_MOVIES", payload: releasedMovies});
     }
@@ -79,12 +62,14 @@ export default function MovieReleaseList() {
     loadMovies();
    },[]
   );
- 
+  
    const onTileClickHandler= (selectedMovie,movieId)=>{
-  //e.preventDefault();
+  
   console.log("key is ",selectedMovie);
   window.sessionStorage.setItem('selected-movie', selectedMovie);
   window.sessionStorage.setItem('selected-movie-id', movieId);
+  const data = {isOpen:false, loginTitle: loginsetup.loginTitle, visibility: "visible"};
+  dispatch({"type": "LOGIN_SETUP", payload : data });
   history.push('/details');
  }
   return (
