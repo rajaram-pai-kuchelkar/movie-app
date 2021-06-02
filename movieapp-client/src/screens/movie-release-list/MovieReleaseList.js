@@ -6,7 +6,6 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
-import movieData from '../../assets/data/movieData';
 import { Link,useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -20,3 +20,5 @@ Seventh Commit : Movie Filter is in action
 Eighth Commit : On details page, Star Ratings is completed, Back to Home button is provided.
 
 ninth Commit : final commit for assignment submission. 
+
+tenth Commit : final commit verified as successfully running for assignment submission

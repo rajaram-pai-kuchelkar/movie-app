@@ -4,15 +4,12 @@ import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import './Details.css';
 import Header from '../common/header/Header';
-import imagecommon from '../../assets/images/imagecommon.jpg';
-import video1 from '../../assets/video/illustration.m4v';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import artistData from '../../assets/data/artistData';
 import ReactPlayer from 'react-player'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useDispatch, useSelector} from 'react-redux';
